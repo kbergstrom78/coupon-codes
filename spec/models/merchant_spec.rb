@@ -1,9 +1,28 @@
 require 'rails_helper'
 
-describe Merchant do
+RSpec.describe Merchant, type: :model do
   describe "validations" do
-    it { should validate_presence_of :name }
+    let(:merchant) { create(:merchant) }
+    it { should validate_presence_of(:name) }
+
+    context "when the merchant has less than 5 active coupons" do
+      it "is valid" do
+        4.times { create(:coupon, merchant: merchant, active: true) }
+        coupon = create(:coupon, merchant: merchant, active: true, name: "Discount", code: "SUMMER20", amount_off: 10)
+        expect(coupon).to be_valid
+      end
+    end
+
+    context "when the merchant has 5 active coupons" do
+      it "is invalid" do
+        5.times { create(:coupon, merchant: merchant, active: true) }
+        coupon = Coupon.new(merchant: merchant, active: true)
+        expect(coupon).not_to be_valid
+        expect(coupon.errors[:base]).to include("Merchant cannot have more than 5 active coupons")
+      end
+    end
   end
+
   describe "relationships" do
     it { should have_many :items }
     it { should have_many(:invoice_items).through(:items) }
@@ -164,7 +183,7 @@ describe Merchant do
       expect(@merchant2.enabled_items).to eq([])
     end
 
-    it "disabled_items" do 
+    it "disabled_items" do
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end

@@ -1,5 +1,6 @@
 class Merchant < ApplicationRecord
   validates_presence_of :name
+  validates :coupons, length: { maximum: 5, message: "cannot have more than 5 active coupons" }
   has_many :items
   has_many :coupons
   has_many :invoice_items, through: :items
@@ -62,4 +63,15 @@ class Merchant < ApplicationRecord
   def disabled_items
     items.where(status: 0)
   end
+
+  def active_coupons
+    coupons.where(active: true)
+  end
+
+  def active_coupon_limit
+    return unless coupons.active.count >= 5
+
+    errors.add(:base, "Merchant cannot have more than 5 active coupons")
+  end
+
 end
