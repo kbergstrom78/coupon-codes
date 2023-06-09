@@ -46,18 +46,9 @@ RSpec.describe "merchant dashboard" do
     @coupon3 = Coupon.create!(name: "New Years", code: "NY15", amount_off: 15, coupon_type: "percent_off", active: false, merchant_id: @merchant1.id, invoice_id: @invoice_3.id)
     @coupon4 = Coupon.create!(name: "Bday Freebie", code: "HBD10", amount_off: 10, coupon_type: "amount_off", active: true, merchant_id: @merchant1.id, invoice_id: nil)
   end
-# 1. Merchant Coupons Index
-
-    # As a merchant
-    # When I visit my merchant dashboard page
-    # I see a link to view all of my coupons
-    # When I click this link
-    # I'm taken to my coupons index page
-    # Where I see all of my coupon names including their amount off
-    # And each coupon's name is also a link to its show page.
 
     it "displays a link to view all coupons" do
-      visit merchant_dashboard_index_path(@merchant1) # Visit the merchant dashboard page
+      visit merchant_dashboard_index_path(@merchant1)
 
       expect(page).to have_link("View All Coupons")
 
@@ -76,10 +67,40 @@ RSpec.describe "merchant dashboard" do
 
     it "links each coupon to its show page" do
       visit merchant_coupons_path(@merchant1)
-      save_and_open_page
+
       expect(page).to have_link(@coupon1.name)
       expect(page).to have_link(@coupon2.name)
       expect(page).to have_link(@coupon3.name)
       expect(page).to have_link(@coupon4.name)
     end
-end
+
+    # # As a merchant When I visit my coupon index page I see a link to create a new coupon.
+    # When I click that link I am taken to a new page where I see a form to add a new coupon.
+    # When I fill in that form with a name, unique code, an amount, and whether that amount is a
+    # percent or a dollar amount
+    # And click the Submit button I'm taken back to the coupon index page
+    # And I can see my new coupon listed.
+
+    # # Sad Paths to consider:
+    # # This Merchant already has 5 active coupons
+    # # Coupon code entered is NOT unique
+
+    it "creates a new coupon" do
+      visit merchant_coupons_path(@merchant1)
+
+      expect(page).to have_link("Create a Coupon")
+
+      click_link("Create a Coupon")
+
+      fill_in "Name", with: "Back to School Savings"
+      fill_in "Code", with: "BTS23"
+      fill_in "coupon_amount_off", with: 10
+      select "percent_off", from: "coupon_coupon_type"
+      click_button "Create Coupon"
+      save_and_open_page
+      expect(current_path).to eq(merchant_coupons_path(@merchant1))
+
+      expect(page).to have_content("Back to School Savings")
+      expect(page).to have_content(10)
+    end
+  end
