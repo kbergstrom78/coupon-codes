@@ -145,7 +145,7 @@ RSpec.describe "merchant dashboard" do
 
       click_link("View All Coupons")
 
-      expect(current_path).to eq("/merchants/#{@merchant1.id/coupons}")
+      expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons")
       expect(page).to have_content(coupon1.name)
       expect(page).to have_content(coupon1.amount_off)
       expect(page).to have_content(coupon2.name)
@@ -153,8 +153,8 @@ RSpec.describe "merchant dashboard" do
     end
 
     it "links each coupon to its show page" do
-      expect(page).to have_link("coupon1.name")
-      expect(page).to have_link("coupon2.name")
+      expect(page).to have_link(coupon1.name)
+      expect(page).to have_link(coupon2.name)
     end
   end
 end

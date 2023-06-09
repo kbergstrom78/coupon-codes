@@ -1,0 +1,19 @@
+<h1>All Coupons</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount Off</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @coupons.each do |coupon| %>
+      <tr>
+        <td><%= coupon.name %></td>
+        <td><%= coupon.amount_off %></td>
+        <td><%= coupon.coupon_type %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -40,6 +40,7 @@ FactoryBot.define do
     name {Faker::Creature::Dog.meme_phrase}
     code {Faker::Commerce.promotion_code(digits: 2)}
     active {[true, false].sample}
+    amount_off{Faker::Number.number(digits: 2)}
     coupon_type {[0,1].sample}
     merchant
   end
