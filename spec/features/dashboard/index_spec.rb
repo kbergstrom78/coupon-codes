@@ -141,7 +141,7 @@ RSpec.describe "merchant dashboard" do
     let!(:coupon2) { FactoryBot.create(:coupon, merchant: @merchant1) }
 
     it "displays a link to view all coupons" do
-      exepct(page).to have_link("View All Coupons")
+      expect(page).to have_link("View All Coupons")
 
       click_link("View All Coupons")
 
