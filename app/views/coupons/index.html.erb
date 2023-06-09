@@ -1,19 +1,9 @@
-<h1>All Coupons</h1>
+<%= render partial: "shared/nav" %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Amount Off</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @coupons.each do |coupon| %>
-      <tr>
-        <td><%= coupon.name %></td>
-        <td><%= coupon.amount_off %></td>
-        <td><%= coupon.coupon_type %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<h3>All Coupons:</h3>
+<% @coupons.each do |coupon| %>
+  <div id="coupon-<%= coupon.id %>">
+  <%= link_to coupon.name, merchant_coupon_path(@merchant, coupon) %>
+      Amount Off: <%= coupon.amount_off %> <%= coupon.coupon_type %></p>
+  </div>
+<% end %>
