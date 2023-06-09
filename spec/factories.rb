@@ -14,6 +14,7 @@ FactoryBot.define do
     name {Faker::Space.galaxy}
     invoices
     items
+    coupons
   end
 
   factory :item do
@@ -33,5 +34,13 @@ FactoryBot.define do
     status {[0,1,2].sample}
     merchant
     invoice
+  end
+
+  factory :coupon do
+    name {Faker::Creature::Dog.meme_phrase}
+    code {Faker::Commerce.promotion_code(digits: 2)}
+    active {[true, false].sample}
+    coupon_type {[0,1].sample}
+    merchant
   end
 end

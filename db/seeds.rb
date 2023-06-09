@@ -14,3 +14,13 @@ Customer.destroy_all
 Coupon.destroy_all
 
 Rake::Task["csv_load:all"].invoke
+setup_coupons
+
+def setup_coupons
+  num_coupons = 12
+
+  num_coupons.times do
+    merchant = FactoryBot.create(:merchant)
+    coupon = FactoryBot.create(:coupon, merchant: merchant)
+  end
+end

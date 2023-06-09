@@ -40,6 +40,12 @@ RSpec.describe "merchant dashboard" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
+    # @coupon_1 = Coupon.create!(name: "Summer Savings", code: "SUMMER25", type: percent_off, active: true, merchant_id: @merchant_1.id, @invoice_id: @invoice_1.id )
+    # @coupon_2 = Coupon.create!(name: "First Time Buyer", code: "FIRST5", type: amount_off active: true, merchant_id: @merchant_1.id, @invoice_id: nil)
+    # @coupon_3 = Coupon.create!(name: "New Years", code: "NY15", type: percent_off, active: false, merchant_id: @merchant_1.id, @invoice_id: @invoice_3.id)
+    # @coupon_4 = Coupon.create!(name: "Bday Freebie", code: "HBD10", type: amount_off, active: true, merchant_id: @merchant_1.id, invoice_id: nil)
+
+
     visit merchant_dashboard_index_path(@merchant1)
   end
 
@@ -118,5 +124,37 @@ RSpec.describe "merchant dashboard" do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+
+    # 1. Merchant Coupons Index
+
+    # As a merchant
+    # When I visit my merchant dashboard page
+    # I see a link to view all of my coupons
+    # When I click this link
+    # I'm taken to my coupons index page
+    # Where I see all of my coupon names including their amount off
+    # And each coupon's name is also a link to its show page.
+
+  describe "Coupons" do
+    let!(:coupon1) { FactoryBot.create(:coupon, merchant: @merchant1) }
+    let!(:coupon2) { FactoryBot.create(:coupon, merchant: @merchant1) }
+
+    it "displays a link to view all coupons" do
+      exepct(page).to have_link("View All Coupons")
+
+      click_link("View All Coupons")
+
+      expect(current_path).to eq("/merchants/#{@merchant1.id/coupons}")
+      expect(page).to have_content(coupon1.name)
+      expect(page).to have_content(coupon1.amount_off)
+      expect(page).to have_content(coupon2.name)
+      expect(page).to have_content(coupon2.amount_off)
+    end
+
+    it "links each coupon to its show page" do
+      expect(page).to have_link("coupon1.name")
+      expect(page).to have_link("coupon2.name")
+    end
   end
 end
