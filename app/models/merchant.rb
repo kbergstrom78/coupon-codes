@@ -67,4 +67,9 @@ class Merchant < ApplicationRecord
   def coupon_valid?(code)
     !coupons.exists?(code: code)
   end
+
+
+  def active_coupons?
+    coupons.where(active:true).count >= 5
+  end
 end
