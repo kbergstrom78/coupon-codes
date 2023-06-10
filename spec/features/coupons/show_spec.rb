@@ -48,7 +48,7 @@ RSpec.describe "merchant dashboard" do
 
     it "shows a coupon and its attributes" do
       visit merchant_coupon_path(@merchant1, @coupon1.id)
-      save_and_open_page
+
       expect(page).to have_content(@coupon1.name)
       expect(page).to have_content(@coupon1.code)
       expect(page).to have_content(@coupon1.amount_off)
@@ -56,6 +56,16 @@ RSpec.describe "merchant dashboard" do
       expect(page).to have_content(@coupon1.status)
 
       expect(page).to have_content("Usage Count: #{@coupon1.usage_count}")
+    end
+
+    it "deactivates a coupon" do
+      visit merchant_coupon_path(@merchant1, @coupon1.id)
+      expect(page).to have_content("Status: Active")
+      expect(page).to have_button("Deactivate")
+      click_button "Deactivate"
+      save_and_open_page
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1.id))
+      expect(page).to have_content("Status: Inactive")
     end
   end
 end

@@ -21,6 +21,4 @@ class Coupon < ApplicationRecord
     .where(transactions: { result: 'success' })
     .count
   end
-
-
 end

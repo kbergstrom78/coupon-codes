@@ -1,15 +1,16 @@
+<%= form_with model: @coupon, url: merchant_coupon_path(@merchant, @coupon), method: :put do |form| %>
+  <%= form.hidden_field :merchant_id, value: @merchant.id %>
+  <body>
+    <div class="row">
+      <p class='col-12'><%= @coupon.name %></p>
+    </div>
 
+    <p>Code: <%= @coupon.code %></p><br/>
+    <p>Amount Off: <%= @coupon.amount_off %></p>
+    <p>Coupon Type: <%= @coupon.coupon_type %></p>
+    <p>Status: <%= @coupon.status %></p>
+    <p>Usage Count: <%= @coupon.usage_count %></p>
 
-<body>
-  <div class="row">
-    <p class='col-12'><%= @coupon.name %></p>
-  </div>
-
-
-  <p>Code: <%= @coupon.code%></p><br/></p>
-
-  <p>Amount Off: <%= @coupon.amount_off %></p>
-  <p>Coupon Type: <%= @coupon.coupon_type %></p>
-  <p>Status: <%= @coupon.status %></p>
-  <p>Usage Count: <%= @coupon.usage_count %></p>
-</body>
+    <%= form.submit "Deactivate", name: "deactivate" %>
+  </body>
+<% end %>
