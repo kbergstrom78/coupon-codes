@@ -139,7 +139,10 @@ describe Merchant do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
 
-      @coupon = @merchant1.coupons.create!(code: 'ABC123')
+      @coupon1 = Coupon.create!(name: "Summer Savings", code: "ABOI34", amount_off: 25, coupon_type: "percent_off", active: true, merchant: @merchant1)
+      @coupon2 = Coupon.create!(name: "First Time Buyer", code: "JKHFD23", amount_off: 5, coupon_type: "amount_off", active: true, merchant: @merchant1)
+      @coupon2 = Coupon.create!(name: "First Time Buyer", code: "JKHFD23", amount_off: 5, coupon_type: "amount_off", active: false, merchant: @merchant1)
+
     end
 
     it "can list items ready to ship" do
@@ -180,5 +183,10 @@ describe Merchant do
         expect(@merchant1.coupon_valid?('ABC123')).to be(false)
       end
     end
+
+    describe "active_coupons" do
+      expect(@merchant1.coupon.active_coupons).to eq(2)
+    end
+
   end
 end
