@@ -20,7 +20,7 @@ class CouponsController < ApplicationController
     if @merchant.active_coupons >= 5
       flash[:alert] = "Error: You may only have 5 active coupons"
       redirect_to merchant_coupons_path(@merchant)
-    elsif @merchant.coupon_valid?(@coupon) && @coupon.save
+    elsif @merchant.coupon_valid?(@coupon.code) && @coupon.save
       flash[:notice] = "Success! A new coupon has been created!"
       redirect_to merchant_coupons_path(@merchant)
     else

@@ -119,4 +119,20 @@ RSpec.describe "merchant dashboard" do
       expect(page).to have_content("Error: You may only have 5 active coupons")
       expect(page).not_to have_content("Cha cha cha")
     end
-end
+
+    it "has invalid data" do
+      visit merchant_coupons_path(@merchant1)
+
+      click_link("Create a Coupon")
+
+      fill_in "Name", with: "Cha cha cha"
+      fill_in "Code", with: "SUMMER25"
+      fill_in "coupon_amount_off", with: 10
+      select "percent_off", from: "coupon_coupon_type"
+      click_button "Create Coupon"
+
+      expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+      expect(page).not_to have_link("Cha cha cha")
+      expect(page).to have_content("Error: invalid data entered")
+    end
+  end
