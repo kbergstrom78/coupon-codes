@@ -4,13 +4,14 @@ describe Merchant do
   describe "validations" do
     it { should validate_presence_of :name }
   end
+
   describe "relationships" do
     it { should have_many :items }
+    it { should have_many :coupons }
     it { should have_many(:invoice_items).through(:items) }
     it {should have_many(:invoices).through(:invoice_items)}
     it { should have_many(:customers).through(:invoices) }
     it { should have_many(:transactions).through(:invoices) }
-
   end
 
   describe "class methods" do
@@ -78,7 +79,6 @@ describe Merchant do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
       @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_9.id)
-
     end
 
     it 'top_merchants' do
@@ -139,7 +139,9 @@ describe Merchant do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
 
+      @coupon = @merchant1.coupons.create!(code: 'ABC123')
     end
+
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4, @item_4])
     end
@@ -164,9 +166,19 @@ describe Merchant do
       expect(@merchant2.enabled_items).to eq([])
     end
 
-    it "disabled_items" do 
+    it "disabled_items" do
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    describe "coupon_valid?" do
+      it "returns true when no coupon code exists" do
+        expect(@merchant1.coupon_valid?('nonexistent_code')).to eq(true)
+      end
+
+      it "returns false" do
+        expect(@merchant1.coupon_valid?('ABC123')).to be(false)
+      end
     end
   end
 end

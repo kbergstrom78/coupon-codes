@@ -43,7 +43,7 @@ RSpec.describe "merchant dashboard" do
 
     @coupon1 = Coupon.create!(name: "Summer Savings", code: "SUMMER25", amount_off: 25, coupon_type: "percent_off", active: true, merchant_id: @merchant1.id, invoice_id: @invoice_1.id)
     @coupon2 = Coupon.create!(name: "First Time Buyer", code: "FIRST5", amount_off: 5, coupon_type: "amount_off", active: true, merchant_id: @merchant1.id, invoice_id: nil)
-    @coupon3 = Coupon.create!(name: "New Years", code: "NY15", amount_off: 15, coupon_type: "percent_off", active: false, merchant_id: @merchant1.id, invoice_id: @invoice_3.id)
+    @coupon3 = Coupon.create!(name: "New Years", code: "NY15", amount_off: 15, coupon_type: "percent_off", active: true, merchant_id: @merchant1.id, invoice_id: @invoice_3.id)
     @coupon4 = Coupon.create!(name: "Bday Freebie", code: "HBD10", amount_off: 10, coupon_type: "amount_off", active: true, merchant_id: @merchant1.id, invoice_id: nil)
   end
 
@@ -74,26 +74,59 @@ RSpec.describe "merchant dashboard" do
       expect(page).to have_link(@coupon4.name)
     end
 
-    # # As a merchant When I visit my coupon index page I see a link to create a new coupon.
-    # When I click that link I am taken to a new page where I see a form to add a new coupon.
-    # When I fill in that form with a name, unique code, an amount, and whether that amount is a
-    # percent or a dollar amount
-    # And click the Submit button I'm taken back to the coupon index page
-    # And I can see my new coupon listed.
-
-    # # Sad Paths to consider:
-    # # This Merchant already has 5 active coupons
-    # # Coupon code entered is NOT unique
-
     it "creates a new coupon" do
       visit merchant_coupons_path(@merchant1)
 
       expect(page).to have_link("Create a Coupon")
 
       click_link("Create a Coupon")
-      
+
+      expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+
+      fill_in "Name", with: "Back to School Savings"
+      fill_in "Code", with: "BTS23"
+      fill_in "coupon_amount_off", with: 10
+      select "percent_off", from: "coupon_coupon_type"
+      click_button "Create Coupon"
+
+      expect(current_path).to eq(merchant_coupons_path(@merchant1))
+
+      expect(page).to have_content("Back to School Savings")
+      expect(page).to have_content(10)
     end
 
+    it "has 5 active coupons" do
+      @coupon5 = Coupon.create!(name: "Supercool", code: "coolio123", amount_off: 25, coupon_type: "percent_off", active: true, merchant_id: @merchant1.id, invoice_id: @invoice_1.id)
+
+      visit merchant_coupons_path(@merchant1)
+
+      click_link("Create a Coupon")
+
+      fill_in "Name", with: "Cha cha cha"
+      fill_in "Code", with: "12345"
+      fill_in "coupon_amount_off", with: 10
+      select "percent_off", from: "coupon_coupon_type"
+      click_button "Create Coupon"
 
 
+      expect(current_path).to eq(merchant_coupons_path(@merchant1))
+      expect(page).to have_content("Error: You may only have 5 active coupons")
+      expect(page).not_to have_content("Cha cha cha")
+    end
+
+    it "has invalid data" do
+      visit merchant_coupons_path(@merchant1)
+
+      click_link("Create a Coupon")
+
+      fill_in "Name", with: "Cha cha cha"
+      fill_in "Code", with: "SUMMER25"
+      fill_in "coupon_amount_off", with: 10
+      select "percent_off", from: "coupon_coupon_type"
+      click_button "Create Coupon"
+
+      expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+      expect(page).not_to have_link("Cha cha cha")
+      expect(page).to have_content("Error: invalid data entered")
+    end
   end

@@ -1,5 +1,6 @@
 class Merchant < ApplicationRecord
   validates_presence_of :name
+
   has_many :items
   has_many :coupons
   has_many :invoice_items, through: :items
@@ -29,21 +30,21 @@ class Merchant < ApplicationRecord
 
   def top_5_items
     items
-    .joins(invoices: :transactions)
-    .where('transactions.result = 1')
-    .select("items.*, sum(invoice_items.quantity * invoice_items.unit_price) as total_revenue")
-    .group(:id)
-    .order('total_revenue desc')
-    .limit(5)
-   end
+      .joins(invoices: :transactions)
+      .where('transactions.result = 1')
+      .select("items.*, sum(invoice_items.quantity * invoice_items.unit_price) as total_revenue")
+      .group(:id)
+      .order('total_revenue desc')
+      .limit(5)
+  end
 
   def self.top_merchants
     joins(invoices: [:invoice_items, :transactions])
-    .where('result = ?', 1)
-    .select('merchants.*, sum(invoice_items.quantity * invoice_items.unit_price) AS total_revenue')
-    .group(:id)
-    .order('total_revenue DESC')
-    .limit(5)
+      .where('result = ?', 1)
+      .select('merchants.*, sum(invoice_items.quantity * invoice_items.unit_price) AS total_revenue')
+      .group(:id)
+      .order('total_revenue DESC')
+      .limit(5)
   end
 
   def best_day
@@ -61,5 +62,14 @@ class Merchant < ApplicationRecord
 
   def disabled_items
     items.where(status: 0)
+  end
+
+  def coupon_valid?(code)
+    !coupons.exists?(code: code)
+  end
+
+
+  def active_coupons
+    coupons.where(active: true).count
   end
 end
