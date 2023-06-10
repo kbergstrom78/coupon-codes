@@ -74,12 +74,6 @@ RSpec.describe "merchant dashboard" do
       expect(page).to have_link(@coupon4.name)
     end
 
-
-
-    # # Sad Paths to consider:
-    # # This Merchant already has 5 active coupons
-    # # Coupon code entered is NOT unique
-
     it "creates a new coupon" do
       visit merchant_coupons_path(@merchant1)
 
