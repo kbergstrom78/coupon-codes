@@ -7,4 +7,12 @@ class Coupon < ApplicationRecord
     amount_off: 1
   }
 
+
+  def status
+    if active
+      "Active"
+    else
+      "Inactive"
+    end
+  end
 end
