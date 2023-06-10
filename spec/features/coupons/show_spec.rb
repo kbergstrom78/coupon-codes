@@ -23,7 +23,7 @@ RSpec.describe "merchant dashboard" do
       @coupon1 = Coupon.create!(name: "Summer Savings", code: "ABOI34", amount_off: 25, coupon_type: "percent_off", active: true, merchant_id: @merchant1.id, invoice_id: @invoice_1.id)
       @coupon2 = Coupon.create!(name: "First Time Buyer", code: "JKHFD23", amount_off: 5, coupon_type: "amount_off", active: true, merchant_id: @merchant1.id, invoice_id: nil)
       @coupon3 = Coupon.create!(name: "New Years", code: "LKSFD89", amount_off: 15, coupon_type: "percent_off", active: true, merchant_id: @merchant1.id, invoice_id: @invoice_3.id)
-      @coupon4 = Coupon.create!(name: "Bday Freebie", code: "UYT35", amount_off: 10, coupon_type: "amount_off", active: true, merchant_id: @merchant1.id, invoice_id: nil)
+      @coupon4 = Coupon.create!(name: "Bday Freebie", code: "UYT35", amount_off: 10, coupon_type: "amount_off", active: false, merchant_id: @merchant1.id, invoice_id: nil)
 
 
       @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
@@ -63,9 +63,20 @@ RSpec.describe "merchant dashboard" do
       expect(page).to have_content("Status: Active")
       expect(page).to have_button("Deactivate")
       click_button "Deactivate"
-      save_and_open_page
+
       expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1.id))
       expect(page).to have_content("Status: Inactive")
+    end
+
+    it "activates a coupon" do
+      visit merchant_coupon_path(@merchant1, @coupon4.id)
+      expect(page).to have_content("Status: Inactive")
+      expect(page).to have_button("Activate")
+      click_button "Activate"
+      save_and_open_page
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon4.id))
+      expect(page).to have_content("Status: Active")
+      expect(page).to have_button("Deactivate")
     end
   end
 end

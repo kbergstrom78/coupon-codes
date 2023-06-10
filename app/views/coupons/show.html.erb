@@ -1,5 +1,4 @@
 <%= form_with model: @coupon, url: merchant_coupon_path(@merchant, @coupon), method: :put do |form| %>
-  <%= form.hidden_field :merchant_id, value: @merchant.id %>
   <body>
     <div class="row">
       <p class='col-12'><%= @coupon.name %></p>
@@ -11,6 +10,10 @@
     <p>Status: <%= @coupon.status %></p>
     <p>Usage Count: <%= @coupon.usage_count %></p>
 
-    <%= form.submit "Deactivate", name: "deactivate" %>
+    <% if @coupon.active %>
+      <%= form.submit "Deactivate", name: "deactivate" %>
+    <% else %>
+      <%= form.submit "Activate", name: "activate" %>
+    <% end %>
   </body>
 <% end %>

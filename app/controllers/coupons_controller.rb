@@ -37,13 +37,11 @@ class CouponsController < ApplicationController
 
     if params[:deactivate]
       @coupon.update(active: false)
-    elsif params[:activate] == "True"
+    elsif params[:activate]
       @coupon.update(active: true)
     end
-    @coupon.save
     redirect_to merchant_coupon_path(@merchant, @coupon)
   end
-
 
   private
   def find_merchant
