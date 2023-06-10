@@ -2,7 +2,8 @@ class CouponsController < ApplicationController
   before_action :find_merchant, only: [:index]
 
   def index
-    @coupons = @merchant.coupons
+    @active_coupons = @merchant.coupons.where(active: true)
+    @inactive_coupons = @merchant.coupons.where(active: false)
   end
 
   def show
