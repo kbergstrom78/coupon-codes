@@ -15,20 +15,19 @@ class CouponsController < ApplicationController
 
   def create
     @merchant = Merchant.find(params[:merchant_id])
-    @coupon = @merchant.coupons.create!(coupon_params)
-    @coupon.merchant_id = @merchant.id
+    @coupon = @merchant.coupons.new(coupon_params)
 
-      if @merchant.active_coupons?
-        redirect_to merchant_coupons_path(@merchant)
-        flash[:alert] = "Error: You may only have 5 active coupons"
-      elsif @merchant.coupon_valid?(@coupon) && @coupon.save
-        redirect_to merchant_coupons_path(@merchant), notice: "Success!  A new coupon has been created!"
-      else
-        redirect_to new_merchant_coupon_path(@merchant)
-        flash[:alert] = "Error: invalid data entered"
-      end
+    if @merchant.active_coupons >= 5
+      flash[:alert] = "Error: You may only have 5 active coupons"
+      redirect_to merchant_coupons_path(@merchant)
+    elsif @merchant.coupon_valid?(@coupon) && @coupon.save
+      flash[:notice] = "Success! A new coupon has been created!"
+      redirect_to merchant_coupons_path(@merchant)
+    else
+      flash[:alert] = "Error: invalid data entered"
+      redirect_to new_merchant_coupon_path(@merchant)
+    end
   end
-
 
   private
   def find_merchant
