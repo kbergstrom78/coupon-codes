@@ -1,35 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe Merchant, type: :model do
+describe Merchant do
   describe "validations" do
-    let(:merchant) { create(:merchant) }
-    it { should validate_presence_of(:name) }
-
-    context "when the merchant has less than 5 active coupons" do
-      it "is valid" do
-        4.times { create(:coupon, merchant: merchant, active: true) }
-        coupon = create(:coupon, merchant: merchant, active: true, name: "Discount", code: "SUMMER20", amount_off: 10)
-        expect(coupon).to be_valid
-      end
-    end
-
-    context "when the merchant has 5 active coupons" do
-      it "is invalid" do
-        5.times { create(:coupon, merchant: merchant, active: true) }
-        coupon = Coupon.new(merchant: merchant, active: true)
-        expect(coupon).not_to be_valid
-        expect(coupon.errors[:base]).to include("Merchant cannot have more than 5 active coupons")
-      end
-    end
+    it { should validate_presence_of :name }
   end
 
   describe "relationships" do
     it { should have_many :items }
+    it { should have_many :coupons }
     it { should have_many(:invoice_items).through(:items) }
     it {should have_many(:invoices).through(:invoice_items)}
     it { should have_many(:customers).through(:invoices) }
     it { should have_many(:transactions).through(:invoices) }
-
   end
 
   describe "class methods" do
@@ -97,7 +79,6 @@ RSpec.describe Merchant, type: :model do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
       @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_9.id)
-
     end
 
     it 'top_merchants' do
@@ -158,7 +139,9 @@ RSpec.describe Merchant, type: :model do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
 
+      @coupon = @merchant1.coupons.create!(code: 'ABC123')
     end
+
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4, @item_4])
     end
@@ -186,6 +169,16 @@ RSpec.describe Merchant, type: :model do
     it "disabled_items" do
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    describe "coupon_valid?" do
+      it "returns true when no coupon code exists" do
+        expect(@merchant1.coupon_valid?('nonexistent_code')).to eq(true)
+      end
+
+      it "returns false" do
+        expect(@merchant1.coupon_valid?('ABC123')).to be(false)
+      end
     end
   end
 end
