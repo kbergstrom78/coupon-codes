@@ -106,7 +106,6 @@ RSpec.describe "invoices show" do
 
   it "displays total revenue dollar off coupon_type" do
     visit merchant_invoice_path(@merchant1, @invoice_9)
-    save_and_open_page
 
     expect(page).to have_content("Subtotal: $#{@invoice_9.total_revenue}")
     expect(page).to have_content("Grand Total After Discount: $#{@invoice_9.grand_total}0")
