@@ -141,52 +141,53 @@ describe Merchant do
 
       @coupon1 = Coupon.create!(name: "Summer Savings", code: "ABOI34", amount_off: 25, coupon_type: "percent_off", active: true, merchant: @merchant1)
       @coupon2 = Coupon.create!(name: "First Time Buyer", code: "JKHFD23", amount_off: 5, coupon_type: "amount_off", active: true, merchant: @merchant1)
-      @coupon2 = Coupon.create!(name: "First Time Buyer", code: "JKHFD23", amount_off: 5, coupon_type: "amount_off", active: false, merchant: @merchant1)
+      @coupon3 = Coupon.create!(name: "First Time Buyer", code: "JKHFD23", amount_off: 5, coupon_type: "amount_off", active: false, merchant: @merchant1)
 
-    end
 
-    it "can list items ready to ship" do
-      expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4, @item_4])
-    end
 
-    it "shows a list of favorite customers" do
-      actual = @merchant1.favorite_customers.map do |customer|
-        customer[:first_name]
-      end
-      expect(actual).to eq([@customer_1.first_name, @customer_2.first_name, @customer_3.first_name, @customer_4.first_name, @customer_6.first_name])
-    end
-
-    it "top_5_items" do
-      expect(@merchant1.top_5_items).to eq([@item_1, @item_2, @item_3, @item_8, @item_4])
-    end
-
-    it "best_day" do
-      expect(@merchant1.best_day).to eq(@invoice_8.created_at.to_date)
-    end
-
-    it "enabled_items" do
-      expect(@merchant1.enabled_items).to eq([@item_1])
-      expect(@merchant2.enabled_items).to eq([])
-    end
-
-    it "disabled_items" do
-      expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
-      expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
-    end
-
-    describe "coupon_valid?" do
-      it "returns true when no coupon code exists" do
-        expect(@merchant1.coupon_valid?('nonexistent_code')).to eq(true)
+      it "can list items ready to ship" do
+        expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4, @item_4])
       end
 
-      it "returns false" do
-        expect(@merchant1.coupon_valid?('ABC123')).to be(false)
+      it "shows a list of favorite customers" do
+        actual = @merchant1.favorite_customers.map do |customer|
+          customer[:first_name]
+        end
+        expect(actual).to eq([@customer_1.first_name, @customer_2.first_name, @customer_3.first_name, @customer_4.first_name, @customer_6.first_name])
+      end
+
+      it "top_5_items" do
+        expect(@merchant1.top_5_items).to eq([@item_1, @item_2, @item_3, @item_8, @item_4])
+      end
+
+      it "best_day" do
+        expect(@merchant1.best_day).to eq(@invoice_8.created_at.to_date)
+      end
+
+      it "enabled_items" do
+        expect(@merchant1.enabled_items).to eq([@item_1])
+        expect(@merchant2.enabled_items).to eq([])
+      end
+
+      it "disabled_items" do
+        expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
+        expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+      end
+
+      describe "coupon_valid?" do
+        it "returns true when no coupon code exists" do
+          expect(@merchant1.coupon_valid?('nonexistent_code')).to eq(true)
+        end
+
+        it "returns false" do
+          expect(@merchant1.coupon_valid?('ABC123')).to be(false)
+        end
+      end
+
+      describe "active_coupons" do
+        it "returns the count of active coupons"
+          expect(@merchant1.active_coupons).to eq(2)
       end
     end
-
-    describe "active_coupons" do
-      expect(@merchant1.coupon.active_coupons).to eq(2)
-    end
-
   end
 end

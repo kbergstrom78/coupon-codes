@@ -68,7 +68,6 @@ class Merchant < ApplicationRecord
     !coupons.exists?(code: code)
   end
 
-
   def active_coupons
     coupons.where(active: true).count
   end

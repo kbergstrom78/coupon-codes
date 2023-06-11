@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "coupon#index" do
+RSpec.describe "coupon#index", type: :feature do
   before :each do
 
     @merchant1 = Merchant.create!(name: "Hair Care")
@@ -136,7 +136,7 @@ RSpec.describe "coupon#index" do
 
     it "has active/inactive sections" do
       visit merchant_coupons_path(@merchant1)
-      save_and_open_page
+
       within "#active" do
         expect(page).to have_content("#{@coupon1.name}")
         expect(page).to have_content("#{@coupon2.name}")
