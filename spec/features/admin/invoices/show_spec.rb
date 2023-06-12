@@ -75,13 +75,8 @@ describe "Admin Invoices Index Page" do
     end
   end
 
-    # 8. Admin Invoice Show Page: Subtotal and Grand Total Revenues
-    # As an admin When I visit one of my admin invoice show pages I see the name and code of the coupon that was used (if there was a coupon applied)
-    # And I see both the subtotal revenue from that invoice (before coupon) and the grand total revenue (after coupon) for this invoice.
-
   it "displays subtotal and grand total revenues and coupon info for a dollar amount off coupon" do
     visit admin_invoice_path(@i3)
-    save_and_open_page
 
     expect(page).to have_content("Subtotal: $100.00")
     expect(page).to have_content("Grand Total After Discount: $75.00")
