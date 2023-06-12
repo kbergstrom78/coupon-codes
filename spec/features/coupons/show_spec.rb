@@ -73,7 +73,7 @@ RSpec.describe "merchant dashboard" do
       expect(page).to have_content("Status: Inactive")
       expect(page).to have_button("Activate")
       click_button "Activate"
-      save_and_open_page
+
       expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon4.id))
       expect(page).to have_content("Status: Active")
       expect(page).to have_button("Deactivate")

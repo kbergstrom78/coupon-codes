@@ -14,3 +14,8 @@ Customer.destroy_all
 Coupon.destroy_all
 
 Rake::Task["csv_load:all"].invoke
+
+
+12.times do
+  FactoryBot.create(:coupon)
+end
