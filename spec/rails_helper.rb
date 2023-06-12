@@ -1,5 +1,6 @@
 require "simplecov"
 SimpleCov.start
+SimpleCov.add_filter %w[spec config application_cable jobs mailers]
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
