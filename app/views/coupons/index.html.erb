@@ -21,3 +21,15 @@
 </div>
 
 <%= link_to "Create a Coupon", new_merchant_coupon_path(@merchant) %>
+
+<section>
+    <div id= "upcoming-holidays">
+  <h2>Upcoming Holidays</h2>
+  <ul>
+    <% @upcoming_holidays.each do |holiday| %>
+      <li>
+        <strong><%= holiday.name %>:</strong> <%= holiday.date %></li>
+      </li>
+    <% end %>
+  </ul>
+</section>

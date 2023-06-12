@@ -50,7 +50,6 @@ RSpec.describe "coupon#index", type: :feature do
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
   end
-
     it "displays a link to view all coupons" do
       visit merchant_dashboard_index_path(@merchant1)
 
@@ -112,7 +111,6 @@ RSpec.describe "coupon#index", type: :feature do
       select "percent_off", from: "coupon_coupon_type"
       click_button "Create Coupon"
 
-
       expect(current_path).to eq(merchant_coupons_path(@merchant1))
       expect(page).to have_content("Error: You may only have 5 active coupons")
       expect(page).not_to have_content("Cha cha cha")
@@ -142,12 +140,23 @@ RSpec.describe "coupon#index", type: :feature do
         expect(page).to have_content("#{@coupon2.name}")
         expect(page).to have_content("#{@coupon3.name}")
         expect(page).to have_content("#{@coupon5.name}")
-    end
+      end
 
       within "#inactive" do
         expect(page).to have_content("#{@coupon4.name}")
         expect(page).to have_content("#{@coupon6.name}")
         expect(page).to have_content("#{@coupon7.name}")
+      end
     end
-  end
+
+    it "has the next 3 holidays" do
+      visit merchant_coupons_path(@merchant1)
+
+      within "#upcoming-holidays" do
+      expect(page).to have_content("Juneteenth")
+      expect(page).to have_content("Independence Day")
+      expect(page).to have_content("Labour Day")
+      expect(page).not_to have_content("Columbus Day")
+      end
+    end
 end

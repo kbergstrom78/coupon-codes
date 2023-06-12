@@ -4,6 +4,7 @@ class CouponsController < ApplicationController
   def index
     @active_coupons = @merchant.coupons.where(active: true)
     @inactive_coupons = @merchant.coupons.where(active: false)
+    @upcoming_holidays = HolidayService.upcoming_holidays
   end
 
   def show
