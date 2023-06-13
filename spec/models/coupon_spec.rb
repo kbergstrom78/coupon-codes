@@ -5,6 +5,20 @@ RSpec.describe Coupon, type: :model do
     it { should belong_to(:merchant) }
   end
 
+  describe "validations" do
+    before do
+    @merchant1 = Merchant.create!(name: 'Hair Care')
+    @coupon2 = Coupon.create!(name: "First Time Buyer", code: "JKHFD23", amount_off: 5, coupon_type: "amount_off", active: false, merchant: @merchant1)
+    end
+    
+    it { should validate_presence_of :name }
+    it { should validate_presence_of :amount_off }
+    it { should validate_presence_of :coupon_type }
+    it { should validate_presence_of :code }
+    it { should validate_numericality_of :amount_off }
+    it { should validate_uniqueness_of :code }
+  end
+
   describe "class methods" do
     before :each do
       @merchant1 = Merchant.create!(name: 'Hair Care')
