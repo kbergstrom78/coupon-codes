@@ -1,20 +1,22 @@
-<%= form_with model: @coupon, url: merchant_coupon_path(@merchant, @coupon), method: :put do |form| %>
-  <body>
-    <div class="row">
-      <p class='col-12'><%= @coupon.name %></p>
-    </div>
-    <h4>Name: <%= @coupon.name %.</h4>
-    <p>Code: <%= @coupon.code %></p><br/>
-    <p>Amount Off: <%= @coupon.amount_off %></p>
-    <p>Coupon Type: <%= @coupon.coupon_type %></p>
-    <p>Status: <%= @coupon.status %></p>
-    <p>Usage Count: <%= @coupon.usage_count %></p>
+<%= render partial: "shared/nav" %>
 
-    <% if @coupon.active %>
-      <%= form.submit "Deactivate", name: "deactivate" %>
-    <% else %>
-      <%= form.submit "Activate", name: "activate" %>
-    <% end %>
-  </body>
+<%= form_with model: @coupon, url: merchant_coupon_path(@merchant, @coupon), method: :put do |form| %>
+  <div class="row">
+    <p class="col-12"><%= @coupon.name %></p>
+  </div>
+  <h4>Name: <%= @coupon.name %></h4>
+  <p>Code: <%= @coupon.code %></p>
+  <br/>
+  <p>Amount Off: <%= @coupon.amount_off %></p>
+  <p>Coupon Type: <%= @coupon.coupon_type %></p>
+  <p>Status: <%= @coupon.status %></p>
+  <p>Usage Count: <%= @coupon.usage_count %></p>
+
+  <% if @coupon.active %>
+    <%= form.submit "Deactivate", name: "deactivate" %>
+  <% else %>
+    <%= form.submit "Activate", name: "activate" %>
+  <% end %>
 <% end %>
-<p><%= link_to "Return to My Coupons", "/merchants/#{@merchant.id}/coupons" %></p>
+
+<p><%= link_to "Return to My Coupons", merchant_coupons_path(@merchant) %></p>
