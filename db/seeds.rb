@@ -29,14 +29,12 @@ Rake::Task["csv_load:all"].invoke
 @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
 @coupon1 = Coupon.create!(name: "goodest boy", coupon_type: "percent_off", amount_off: 20, code: "GB123", merchant_id: 1)
-@coupon2 = Coupon.create!(name: "boop the snoot", coupon_type: "percent_off", amount_off: 30, code: "BTS123", merchant_id: 1)
+@coupon2 = Coupon.create!(name: "boop the snoot", coupon_type: "percent_off", amount_off: 30, code: "BTS123", merchant_id: 2)
 @coupon3 = Coupon.create!(name: "big ol' pupper", coupon_type: "amount_off", amount_off: 10, code: "BOOP246", merchant_id: 1)
-@coupon4 = Coupon.create!(name: "long boi", coupon_type: "amount_off", amount_off: 30, code: "LBOI2023", merchant_id: 2)
-@coupon5 = Coupon.create!(name: "thicc doggo", coupon_type: "percent_off", amount_off: 0, code: "THICC123", merchant_id: 2)
-@coupon6 = Coupon.create!(name: "smoll pupperino", coupon_type: "amount_off", amount_off: 5, code: "SMOLL56", merchant_id: 1)
+@coupon4 = Coupon.create!(name: "thicc doggo", coupon_type: "percent_off", amount_off: 0, code: "THICC123", merchant_id: 2)
 @coupon8 = Coupon.create!(name: "big borker", coupon_type: "percent_off", amount_off: 98, code: "BIGBORK34", merchant_id: 2)
 @coupon9 = Coupon.create!(name: "small floof", coupon_type: "amount_off", amount_off: 10, code: "FLOOF89", merchant_id: 1)
-@coupon10 = Coupon.create!(name: "busy splooting", coupon_type: "percent_off", amount_off: 40, code: "SPLOOT78", merchant_id: 1)
+@coupon10 = Coupon.create!(name: "busy splooting", coupon_type: "percent_off", amount_off: 40, code: "SPLOOT78", merchant_id: 2)
 @coupon11 = Coupon.create!(name: "yes this is dog ", coupon_type: "amount_off", amount_off: 5, code: "YESDOG98", merchant_id: 2)
 @coupon12 = Coupon.create!(name: "you did me a bamboozle", coupon_type: "percent_off", amount_off: 15, code: "BAMBOOZLE3", merchant_id: 1)
 

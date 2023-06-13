@@ -7,6 +7,9 @@ class Coupon < ApplicationRecord
     amount_off: 1
   }
 
+  validates :name, :code, :coupon_type, :merchant_id, :amount_off, presence: true
+  validates :code, uniqueness: true
+  validates :amount_off, numericality: { only_integer: true }
 
   def status
     if self.active
