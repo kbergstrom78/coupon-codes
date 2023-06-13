@@ -78,6 +78,20 @@ RSpec.describe "merchant dashboard" do
       expect(page).to have_content("Status: Active")
       expect(page).to have_button("Deactivate")
     end
+
+    it "does not deactivate a coupon with pending invoices" do
+      pending_invoice = Invoice.create!(customer_id: @customer_1.id, status: 1, coupon: @coupon1)
+
+      visit merchant_coupon_path(@merchant1, @coupon1.id)
+      expect(page).to have_content("Status: Active")
+      expect(page).to have_button("Deactivate")
+
+      click_button "Deactivate"
+
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1.id))
+      expect(page).to have_content("Status: Active")
+      expect(page).to have_content("Coupon cannot be deactivated because it is used in a pending invoice.")
+    end
   end
 end
 

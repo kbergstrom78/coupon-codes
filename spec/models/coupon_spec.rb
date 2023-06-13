@@ -10,7 +10,7 @@ RSpec.describe Coupon, type: :model do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @coupon2 = Coupon.create!(name: "First Time Buyer", code: "JKHFD23", amount_off: 5, coupon_type: "amount_off", active: false, merchant: @merchant1)
     end
-    
+
     it { should validate_presence_of :name }
     it { should validate_presence_of :amount_off }
     it { should validate_presence_of :coupon_type }
@@ -97,8 +97,13 @@ RSpec.describe Coupon, type: :model do
       expect(@coupon2.usage_count).to eq(1)
     end
 
+    it 'does not deactivate a coupon with pending invoices' do
+      @invoice_7.update(coupon: @coupon1)
 
+      @coupon1.update(active: false)
 
+      expect(@coupon1.errors.full_messages).to include("Active cannot be deactived; used in pending invoice")
+      expect(@coupon1.reload.active).to eq(true)
+    end
   end
 end
-
