@@ -4,7 +4,7 @@
 <div id="active">
   <% @active_coupons.each do |coupon| %>
     <div id="coupon-<%= coupon.id %>">
-      <%= link_to coupon.name, merchant_coupon_path(@merchant, coupon) %>
+    <%= link_to coupon.name, merchant_coupon_path(merchant_id: @merchant.id, id: coupon.id) %>
       Amount Off: <%= coupon.amount_off %> <%= coupon.coupon_type %></p>
     </div>
   <% end %>
@@ -34,4 +34,3 @@
   </ul>
 </section>
 
-<%= link_to "Back to My Coupon Index", merchant_coupons_path(@merchant) %>
